@@ -1,6 +1,4 @@
-const express = require('express')
-const mysql = require('mysql');
-
+const express = require('express');
 const app = express();
 
 app.get('/', function (req, res) {
