@@ -14,7 +14,9 @@ const time = new Date().getTime();
 const camera = new PiCamera({
   mode: "photo",
   output: `/tmp/analyze/${time}.jpg`,
-  nopreview: true
+  nopreview: true,
+  width: 640,
+  height: 480
 });
 
-camera.snap.then(() => console.log("tchick"));
+camera.snap().then(() => console.log("tchick"));
