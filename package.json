@@ -5,6 +5,10 @@
   "license": "MIT",
   "dependencies": {
     "express": "4.17.1",
-    "knex": "0.20.10"
+    "knex": "0.20.10",
+    "mysql2": "^2.1.0"
+  },
+  "scripts": {
+    "createTables": "node ./scripts/createTables"
   }
 }

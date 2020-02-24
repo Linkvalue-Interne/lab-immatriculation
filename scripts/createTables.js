@@ -1,7 +1,7 @@
 const knex = require('knex')({
   client: 'mysql2',
   connection: {
-    host : '192.168.16.150',
+    host : 'localhost',
     database: 'pi',
     user:     'pi',
     password: 'raspberry'
@@ -35,4 +35,6 @@ knex.schema
       .references('license_plates.id');
     table.time('created_at');
     table.timestamp('created_at').defaultTo(knex.fn.now());
+  }).then( function() {
+    console.log('ok');
   });
