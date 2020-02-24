@@ -13,8 +13,6 @@ knex.schema
     table.increments('id');
     table.string('last_name');
     table.string('first_name');
-    table.time('created_at');
-    table.timestamp('created_at').defaultTo(knex.fn.now());
   })
   .createTable('license_plates', function(table) {
     table.increments('id');
@@ -23,8 +21,6 @@ knex.schema
       .integer('user_id')
       .unsigned()
       .references('users.id');
-    table.time('created_at');
-    table.timestamp('created_at').defaultTo(knex.fn.now());
   })
   .createTable('fails', function(table) {
     table.increments('id');
@@ -33,8 +29,4 @@ knex.schema
       .integer('license_plate_id')
       .unsigned()
       .references('license_plates.id');
-    table.time('created_at');
-    table.timestamp('created_at').defaultTo(knex.fn.now());
-  }).then( function() {
-    console.log('ok');
   });
