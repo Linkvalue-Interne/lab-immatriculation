@@ -53,7 +53,7 @@ app.get("/take/picture", async function(req, res, next) {
     return next();
   }
 
-  knex('fails')
+  await knex("fails")
     .insert({
       detected_license_plate: result.plate 
     });
