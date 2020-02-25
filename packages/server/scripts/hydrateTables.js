@@ -1,7 +1,7 @@
 const knex = require("knex")({
   client: "mysql2",
   connection: {
-    host: "rpi",
+    host: "localhost",
     database: "pi",
     user: "pi",
     password: "raspberry"
