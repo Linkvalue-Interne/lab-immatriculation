@@ -29,31 +29,33 @@ app.get("/take/picture", async function(req, res, next) {
   const { results } = JSON.parse(commandResult);
   const result = results[0];
 
-  if (result) {
-    const users = await knex("users")
+  if (!result) {
+    console.log("No license plate founded.");
+
+    res.json({ user: null, analyzedLicensePlate: null });
+    return next();
+  }
+
+  if (result.confidence > CONFIDENCE_MINIMAL_VALUE) {
+    const user = await knex("users")
       .select("users.*")
       .join("license_plates", "license_plates.user_id", "=", "users.id")
       .where({ license_plate: result.plate });
 
-    res.json({ users });
-
+    res.json({ user, analyzedLicensePlate: null });
     return next();
   }
 
-  res.json({ users: [] });
+  knex('fails')
+    .insert({
+      detected_license_plate: result.plate 
+    });
 
+  res.json({ user: null, analyzedLicensePlate: result.plate });
   return next();
 });
 
-app.get("/plate/:id", function(req, res) {
-  res.send(
-    knex.select("license_plates").where("license_plate", "=", req.params.id)
-  );
-});
-
-app.get("/plates", function(req, res) {
-  res.send(knex.select("license_plates"));
-});
+//post for return analyzed plate
 
 app.listen(3000, function() {
   console.log("Server listening on port 3000!");
