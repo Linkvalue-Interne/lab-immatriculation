@@ -14,7 +14,7 @@ const knex = require('knex')({
 app.get('/take/picture', function (req, res) {
   const time = new Date().getTime();
   execSync(`raspistill -o /tmp/analyze/${time}.jpg -t 300`);
-  let scan_picture = execSync(`alpr /tmp/analyze/${time}.jpg -c eu --json`);
+  let scan_picture = execSync(`alpr /home/pi/Nouvelle_immatriculation_des_véhicules_de_la_police_française.jpg -c eu --json`);
 
   res.send(scan_picture);
 });
