@@ -2,7 +2,7 @@ const { execSync } = require("child_process");
 const express = require("express");
 const cors = require("cors");
 
-const CONFIDENCE_MINIMAL_VALUE = 100;
+const CONFIDENCE_MINIMAL_VALUE = 75;
 
 const app = express();
 
@@ -64,7 +64,23 @@ app.get("/take/picture", async function(req, res, next) {
   return next();
 });
 
-//post for return analyzed plate
+app.post("/revise/fail", function(req, res) {
+  const [plate] = await knex("license_plates")
+    .select("license_plates.*")
+    .where({ license_plate: req.body.new });
+  
+  if (!plate) {
+    res.status(404);
+    return next();
+  }
+
+  await knex("fails")
+      .where({ detected_license_plate: req.body.old })
+      .update({ license_plate_id: plate.id });
+  
+  res.status(200);
+  return next();
+});
 
 app.listen(3000, function() {
   console.log("Server listening on port 3000!");
