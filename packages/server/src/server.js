@@ -13,8 +13,10 @@ const knex = require('knex')({
 
 app.get('/take/picture', function (req, res) {
   const time = new Date().getTime();
-  let child = execSync(`raspistill -o /tmp/analyze/${time}.jpg -t 300`);
-  res.send(child);
+  execSync(`raspistill -o /tmp/analyze/${time}.jpg -t 300`);
+  let scan_picture = execSync(`alpr /tmp/analyze/${time}.jpg -c eu --json`);
+
+  res.send(scan_picture.stdout.toString());
 });
 
 app.get('/plate/:id', function (req, res) {
