@@ -42,7 +42,7 @@ app.get("/take/picture", async function(req, res, next) {
       .join("license_plates", "license_plates.user_id", "=", "users.id")
       .where({ license_plate: result.plate });
 
-    res.json({ user, analyzedLicensePlate: null });
+    res.json({ user, analyzedLicensePlate: result.plate });
     return next();
   }
 
