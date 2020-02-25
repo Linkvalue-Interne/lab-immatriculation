@@ -44,7 +44,6 @@ app.get("/take/picture", async function(req, res, next) {
     
     if (!user) {
       res
-        .status(403)
         .json({ user: null, analyzedLicensePlate: result.plate });
       return next();
     }
