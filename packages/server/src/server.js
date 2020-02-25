@@ -18,7 +18,7 @@ const knex = require("knex")({
 
 app.use(cors());
 
-app.get("/take/picture", function(req, res) {
+app.get("/take/picture", async function(req, res) {
   const time = new Date().getTime();
   execSync(`raspistill -o /tmp/analyze/${time}.jpg -t 300`);
 
@@ -27,9 +27,15 @@ app.get("/take/picture", function(req, res) {
     { encoding: "utf8" }
   );
   const { results } = JSON.parse(commandResult);
-  const firstResult = results[0] || {};
+  const result = results[0];
 
-  res.json(firstResult);
+  if (result) {
+    const users = await knex
+      .select("users")
+      .join("license_plates", "license_plates.user_id", "=", "users.id");
+
+    console.log(users);
+  }
 });
 
 app.get("/plate/:id", function(req, res) {
