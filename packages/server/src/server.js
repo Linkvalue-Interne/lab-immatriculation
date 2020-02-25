@@ -37,7 +37,7 @@ app.get("/take/picture", async function(req, res, next) {
   }
 
   if (result.confidence > CONFIDENCE_MINIMAL_VALUE) {
-    const user = await knex("users")
+    const [user] = await knex("users")
       .select("users.*")
       .join("license_plates", "license_plates.user_id", "=", "users.id")
       .where({ license_plate: result.plate });
