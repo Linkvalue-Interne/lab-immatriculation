@@ -18,7 +18,7 @@ const knex = require("knex")({
 
 app.use(cors());
 
-app.get("/take/picture", async function(req, res) {
+app.get("/take/picture", async function(req, res, next) {
   const time = new Date().getTime();
   execSync(`raspistill -o /tmp/analyze/${time}.jpg -t 300`);
 
@@ -36,9 +36,13 @@ app.get("/take/picture", async function(req, res) {
       .where({ license_plate: result.plate });
 
     res.json({ users });
+
+    return next();
   }
 
   res.json({ users: [] });
+
+  return next();
 });
 
 app.get("/plate/:id", function(req, res) {
