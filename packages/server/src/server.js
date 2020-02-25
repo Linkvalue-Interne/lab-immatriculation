@@ -30,12 +30,12 @@ app.get("/take/picture", async function(req, res) {
   const result = results[0];
 
   if (result) {
-    const users = await knex
-      .select("users")
+    const users = await knex("users")
+      .select("users.*")
       .join("license_plates", "license_plates.user_id", "=", "users.id");
-
-    console.log(users);
   }
+
+  res.json(users);
 });
 
 app.get("/plate/:id", function(req, res) {
@@ -44,13 +44,10 @@ app.get("/plate/:id", function(req, res) {
   );
 });
 
-app.get('/plates', function (req, res) {
-  res.send(
-    knex
-      .select('license_plates')
-  );
+app.get("/plates", function(req, res) {
+  res.send(knex.select("license_plates"));
 });
 
-app.listen(3000, function () {
-  console.log('Server listening on port 3000!')
+app.listen(3000, function() {
+  console.log("Server listening on port 3000!");
 });
