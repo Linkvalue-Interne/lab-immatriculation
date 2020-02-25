@@ -2,14 +2,18 @@
   "name": "lab-immatriculation-client",
   "version": "0.1.0",
   "scripts": {
-    "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start": "vue-cli-service serve"
   },
   "dependencies": {
+    "@mdi/font": "^3.6.95",
+    "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "roboto-fontface": "*",
     "vue": "^2.6.11",
-    "vue-router": "^3.1.5"
+    "vue-router": "^3.1.5",
+    "vuetify": "^2.2.14"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.2.0",
@@ -23,6 +27,7 @@
     "eslint-plugin-vue": "^6.1.2",
     "lint-staged": "^9.5.0",
     "prettier": "^1.19.1",
+    "vue-cli-plugin-vuetify": "~2.0.5",
     "vue-template-compiler": "^2.6.11"
   },
   "gitHooks": {

@@ -1,18 +1,38 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div>
+    <UserInformation v-if="user" :user="user" />
+    <v-btn absolute dark fab bottom right color="blue" @click="analyze()">
+      <v-icon>mdi-video-input-antenna</v-icon>
+    </v-btn>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import UserInformation from "@/components/UserInformation.vue";
+import { analyze } from "@/services/plate";
 
 export default {
   name: "Home",
   components: {
-    HelloWorld
+    UserInformation
+  },
+
+  methods: {
+    async analyze() {
+      try {
+        const user = await analyze();
+
+        this.user = user;
+      } catch (error) {
+        this.$router.push("/low-confidence/" + error.plate);
+      }
+    }
+  },
+
+  data() {
+    return {
+      user: null
+    };
   }
 };
 </script>
