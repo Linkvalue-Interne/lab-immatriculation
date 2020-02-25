@@ -14,14 +14,7 @@ const knex = require('knex')({
 app.get('/take/picture', function (req, res) {
   const time = new Date().getTime();
   let child = execSync(`raspistill -o /tmp/analyze/${time}.jpg -t 300`);
-
-  child.stdout.on('data', (data) => {
-    res.send(`child stdout:\n${data}`);
-  });
-  
-  child.stderr.on('data', (data) => {
-    res.send(`child stderr:\n${data}`);
-  });
+  res.send(child);
 });
 
 app.get('/plate/:id', function (req, res) {
