@@ -13,7 +13,7 @@ const knex = require('knex')({
 
 app.get('/take/picture', function (req, res) {
   const time = new Date().getTime();
-  let child = spawn(`raspistill -o /tmp/analyze/${time}.jpg -t 300`);
+  let child = spawn(`sudo raspistill -o /tmp/analyze/${time}.jpg -t 300`);
 
   child.stdout.on('data', (data) => {
     console.log(`child stdout:\n${data}`);
