@@ -41,10 +41,9 @@ app.get("/take/picture", async function(req, res, next) {
       .select("users.*")
       .join("license_plates", "license_plates.user_id", "=", "users.id")
       .where({ license_plate: result.plate });
-    
+
     if (!user) {
-      res
-        .json({ user: null, analyzedLicensePlate: result.plate });
+      res.json({ user: null, analyzedLicensePlate: result.plate });
       return next();
     }
 
@@ -52,31 +51,28 @@ app.get("/take/picture", async function(req, res, next) {
     return next();
   }
 
-  await knex("fails")
-    .insert({
-      detected_license_plate: result.plate 
-    });
+  await knex("fails").insert({
+    detected_license_plate: result.plate
+  });
 
-  res
-    .status(404)
-    .json({ user: null, analyzedLicensePlate: result.plate });
+  res.status(404).json({ user: null, analyzedLicensePlate: result.plate });
   return next();
 });
 
-app.post("/revise/fail", function(req, res) {
+app.post("/revise/fail", async function(req, res) {
   const [plate] = await knex("license_plates")
     .select("license_plates.*")
     .where({ license_plate: req.body.new });
-  
+
   if (!plate) {
     res.status(404);
     return next();
   }
 
   await knex("fails")
-      .where({ detected_license_plate: req.body.old })
-      .update({ license_plate_id: plate.id });
-  
+    .where({ detected_license_plate: req.body.old })
+    .update({ license_plate_id: plate.id });
+
   res.status(200);
   return next();
 });
