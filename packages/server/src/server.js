@@ -1,4 +1,4 @@
-const { spawn } = require("child_process");
+const { execSync } = require("child_process");
 const express = require('express');
 const app = express();
 const knex = require('knex')({
@@ -13,7 +13,7 @@ const knex = require('knex')({
 
 app.get('/take/picture', function (req, res) {
   const time = new Date().getTime();
-  let child = spawn('raspistill',['-o', `/tmp/analyze/${time}.jpg`, '-t', 300]);
+  let child = execSync(`raspistill -o /tmp/analyze/${time}.jpg -t 300`);
 
   child.stdout.on('data', (data) => {
     res.send(`child stdout:\n${data}`);
