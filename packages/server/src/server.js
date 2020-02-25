@@ -16,11 +16,11 @@ app.get('/take/picture', function (req, res) {
   let child = spawn('raspistill',['-o', `/tmp/analyze/${time}.jpg`, '-t', 300]);
 
   child.stdout.on('data', (data) => {
-    console.log(`child stdout:\n${data}`);
+    res.send(`child stdout:\n${data}`);
   });
   
   child.stderr.on('data', (data) => {
-    console.error(`child stderr:\n${data}`);
+    res.send(`child stderr:\n${data}`);
   });
 });
 
