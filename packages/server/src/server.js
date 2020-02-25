@@ -32,10 +32,13 @@ app.get("/take/picture", async function(req, res) {
   if (result) {
     const users = await knex("users")
       .select("users.*")
-      .join("license_plates", "license_plates.user_id", "=", "users.id");
+      .join("license_plates", "license_plates.user_id", "=", "users.id")
+      .where({ license_plate: result });
+
+    res.json({ users });
   }
 
-  res.json(users);
+  res.json({ users: [] });
 });
 
 app.get("/plate/:id", function(req, res) {
