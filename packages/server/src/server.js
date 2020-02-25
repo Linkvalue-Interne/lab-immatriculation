@@ -16,7 +16,7 @@ app.get('/take/picture', function (req, res) {
   execSync(`raspistill -o /tmp/analyze/${time}.jpg -t 300`);
   let scan_picture = execSync(`alpr /tmp/analyze/${time}.jpg -c eu --json`);
 
-  res.send(scan_picture.stdout.toString());
+  res.send(scan_picture);
 });
 
 app.get('/plate/:id', function (req, res) {
