@@ -23,7 +23,7 @@ app.get("/take/picture", async function(req, res, next) {
   execSync(`raspistill -o /tmp/analyze/${time}.jpg -t 300`);
 
   const commandResult = execSync(
-    `alpr -c eu --json -n 1 /tmp/analyze/${time}.jpg`,
+    `alpr -c eu --json -n 1 /home/pi/voiture-bleue-plaque-immatriculation-main-12878161.jpg`,
     { encoding: "utf8" }
   );
   const { results } = JSON.parse(commandResult);
