@@ -41,6 +41,12 @@ app.get("/take/picture", async function(req, res, next) {
       .select("users.*")
       .join("license_plates", "license_plates.user_id", "=", "users.id")
       .where({ license_plate: result.plate });
+    
+    if (!!user) {
+      res
+        .status(403)
+        .json({ user: null, analyzedLicensePlate: result.plate });
+    }
 
     res.json({ user, analyzedLicensePlate: result.plate });
     return next();
@@ -51,7 +57,9 @@ app.get("/take/picture", async function(req, res, next) {
       detected_license_plate: result.plate 
     });
 
-  res.json({ user: null, analyzedLicensePlate: result.plate });
+  res
+    .status(404)
+    .json({ user: null, analyzedLicensePlate: result.plate });
   return next();
 });
 
