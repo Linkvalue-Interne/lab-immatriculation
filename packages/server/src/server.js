@@ -2,7 +2,7 @@ const { execSync } = require("child_process");
 const express = require("express");
 const cors = require("cors");
 
-const CONFIDENCE_MINIMAL_VALUE = 90;
+const CONFIDENCE_MINIMAL_VALUE = 75;
 
 const app = express();
 
@@ -51,7 +51,6 @@ app.get("/take/picture", async function(req, res, next) {
       .join("license_plates", "license_plates.user_id", "=", "users.id")
       .where({ license_plate: firstMatch.plate });
 
-      console.log(user);
     if (!user) {
       res.json({ user: null, analyzedLicensePlate: firstMatch.plate });
       return next();
