@@ -24,7 +24,7 @@ app.get("/take/picture", async function(req, res, next) {
   const imageName = `/tmp/${time}.jpg`;
   execSync(`raspistill -o ${imageName} -t 300`);
 
-  const commandResult = execSync(`alpr -c eu --json -n 1 ${imageName}`, {
+  const commandResult = execSync(`alpr -c fr --json -n 1 ${imageName}`, {
     encoding: "utf8"
   });
   const { results } = JSON.parse(commandResult);
