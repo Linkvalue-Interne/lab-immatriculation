@@ -4,7 +4,7 @@
       v-if="user && !user.firstName"
       type="error"
     >No associated user with plate {{ user.licensePlate }}</v-alert>
-    <UserInformation v-elseif="user && user.firstName" :user="user" />
+    <UserInformation v-if="user && user.firstName" :user="user" />
     <v-btn absolute dark fab bottom right color="blue" @click="analyze()">
       <v-icon v-if="analyzing">mdi-timer</v-icon>
       <v-icon v-else>mdi-video-input-antenna</v-icon>
