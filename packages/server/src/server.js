@@ -60,7 +60,7 @@ app.get("/take/picture", async function(req, res, next) {
   return next();
 });
 
-app.post("/revise/fail", async function(req, res) {
+app.post("/revise/fail", async function(req, res, next) {
   const [plate] = await knex("license_plates")
     .select("license_plates.*")
     .where({ license_plate: req.body.new });
