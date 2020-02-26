@@ -60,6 +60,14 @@ app.get("/take/picture", async function(req, res, next) {
   return next();
 });
 
+app.get("/fails", async function(req, res, next) {
+  const fails = await knex("fails")
+    .select("*");
+  
+  res.json({ fails });
+  return next();
+});
+
 app.post("/revise/fail", async function(req, res, next) {
   const [new_plate] = await knex("license_plates")
     .select("license_plates.*")
