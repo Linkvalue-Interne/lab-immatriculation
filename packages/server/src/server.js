@@ -2,7 +2,7 @@ const { execSync } = require("child_process");
 const express = require("express");
 const cors = require("cors");
 
-const CONFIDENCE_MINIMAL_VALUE = 75;
+const CONFIDENCE_MINIMAL_VALUE = 90;
 
 const app = express();
 
@@ -21,12 +21,12 @@ app.use(express.json());
 
 app.get("/take/picture", async function(req, res, next) {
   const time = new Date().getTime();
-  execSync(`raspistill -o /tmp/analyze/${time}.jpg -t 300`);
+  const imageName = `/tmp/analyze/${time}.jpg`;
+  execSync(`raspistill -o ${imageName} -t 300`);
 
-  const commandResult = execSync(
-    `alpr -c eu --json -n 1 /home/pi/Nouvelle_immatriculation_des_véhicules_de_la_police_française.jpg`,
-    { encoding: "utf8" }
-  );
+  const commandResult = execSync(`alpr -c eu --json -n 1 ${imageName}`, {
+    encoding: "utf8"
+  });
   const { results } = JSON.parse(commandResult);
   const result = results[0];
 
