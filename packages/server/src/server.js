@@ -29,7 +29,7 @@ app.get("/take/picture", async function(req, res, next) {
   });
   const { results } = JSON.parse(commandResult);
 
-  if (!results) {
+  if (results.length === 0) {
     console.log("No license plate founded.");
 
     res.json({ user: null, analyzedLicensePlate: null });
