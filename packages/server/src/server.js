@@ -24,39 +24,40 @@ app.get("/take/picture", async function(req, res, next) {
   const imageName = `/tmp/${time}.jpg`;
   execSync(`raspistill -o ${imageName} -t 300`);
 
-  const commandResult = execSync(`alpr -c eu -p fr --json -n 1 ${imageName}`, {
+  const commandResult = execSync(`alpr -c eu -p fr --json ${imageName}`, {
     encoding: "utf8"
   });
   const { results } = JSON.parse(commandResult);
-  const result = results[0];
 
-  if (!result) {
+  if (!results) {
     console.log("No license plate founded.");
 
     res.json({ user: null, analyzedLicensePlate: null });
     return next();
   }
 
-  if (result.confidence > CONFIDENCE_MINIMAL_VALUE) {
+  const [firstMatch] = results.filter(result => result.pattern_match === 1);
+
+  if (firstMatch.confidence > CONFIDENCE_MINIMAL_VALUE) {
     const [user] = await knex("users")
       .select("users.*")
       .join("license_plates", "license_plates.user_id", "=", "users.id")
-      .where({ license_plate: result.plate });
+      .where({ license_plate: firstMatch.plate });
 
     if (!user) {
-      res.json({ user: null, analyzedLicensePlate: result.plate });
+      res.json({ user: null, analyzedLicensePlate: firstMatch.plate });
       return next();
     }
 
-    res.json({ user, analyzedLicensePlate: result.plate });
+    res.json({ user, analyzedLicensePlate: firstMatch.plate });
     return next();
   }
 
   await knex("fails").insert({
-    detected_license_plate: result.plate
+    detected_license_plate: firstMatch.plate
   });
 
-  res.status(404).json({ user: null, analyzedLicensePlate: result.plate });
+  res.status(404).json({ user: null, analyzedLicensePlate: firstMatch.plate });
   return next();
 });
 
