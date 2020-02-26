@@ -1,6 +1,10 @@
 <template>
   <div>
-    <UserInformation v-if="user" :user="user" />
+    <v-alert
+      v-if="user && !user.firstName"
+      type="error"
+    >No associated user with plate {{ user.licensePlate }}</v-alert>
+    <UserInformation v-else :user="user" />
     <v-btn absolute dark fab bottom right color="blue" @click="analyze()">
       <v-icon>mdi-video-input-antenna</v-icon>
     </v-btn>
