@@ -9,7 +9,7 @@ const app = express();
 const knex = require("knex")({
   client: "mysql2",
   connection: {
-    host: "localhost",
+    host: "192.168.16.150",
     database: "pi",
     user: "pi",
     password: "raspberry"
@@ -61,20 +61,35 @@ app.get("/take/picture", async function(req, res, next) {
 });
 
 app.post("/revise/fail", async function(req, res, next) {
-  const [plate] = await knex("license_plates")
+  const [new_plate] = await knex("license_plates")
     .select("license_plates.*")
     .where({ license_plate: req.body.new });
 
-  if (!plate) {
-    res.status(404).send("Not found");
+  if (!new_plate) {
+    res
+      .status(404)
+      .send("License plate unknow.");
+    return next();
+  }
+
+  const [fail] = await knex("fails")
+    .select("fails.*")
+    .where({ detected_license_plate: req.body.old });
+
+  if (!fail) {
+    res
+      .status(404)
+      .send("Detected license plate unknow.");
     return next();
   }
 
   await knex("fails")
     .where({ detected_license_plate: req.body.old })
-    .update({ license_plate_id: plate.id });
+    .update({ license_plate_id: new_plate.id });
 
-  res.status(200).send("Updated");
+  res
+    .status(200)
+    .send("Updated");
   return next();
 });
 
