@@ -35,8 +35,8 @@ app.get("/take/picture", async function(req, res, next) {
     res.json({ user: null, analyzedLicensePlate: null });
     return next();
   }
-
-  const [firstMatch] = results.filter(result => result.pattern_match === 1);
+  console.log(results[0]);
+  const [firstMatch] = results.filter(result => result.patternMatch === 1);
 
   if (!firstMatch) {
     console.log("No pattern match founded.");
