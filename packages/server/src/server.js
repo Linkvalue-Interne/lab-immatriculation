@@ -38,7 +38,7 @@ app.get("/take/picture", async function(req, res, next) {
 
   const [firstMatch] = results.filter(result => result.pattern_match === 1);
 
-  if (firstMatch.confidence > CONFIDENCE_MINIMAL_VALUE) {
+  if (firstMatch && firstMatch.confidence > CONFIDENCE_MINIMAL_VALUE) {
     const [user] = await knex("users")
       .select("users.*")
       .join("license_plates", "license_plates.user_id", "=", "users.id")
