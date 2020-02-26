@@ -36,7 +36,7 @@ app.get("/take/picture", async function(req, res, next) {
     return next();
   }
   console.log(results[0]);
-  const [firstMatch] = results.filter(result => result.patternMatch === 1);
+  const [firstMatch] = results.filter(result => result.matches_template === 1);
 
   if (!firstMatch) {
     console.log("No pattern match founded.");
