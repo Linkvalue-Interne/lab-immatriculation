@@ -9,7 +9,7 @@ const app = express();
 const knex = require("knex")({
   client: "mysql2",
   connection: {
-    host: "192.168.16.150",
+    host: "localhost",
     database: "pi",
     user: "pi",
     password: "raspberry"
