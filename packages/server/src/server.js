@@ -17,6 +17,7 @@ const knex = require("knex")({
 });
 
 app.use(cors());
+app.use(express.json());
 
 app.get("/take/picture", async function(req, res, next) {
   const time = new Date().getTime();
