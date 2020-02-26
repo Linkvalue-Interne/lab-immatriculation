@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const serverURL = process.env.VUE_APP_SERVER_URL || "http://localhost:3000";
+
 export async function analyze() {
   try {
-    const { data } = await axios.get("http://rpi:3000/take/picture", {
+    const { data } = await axios.get(`${serverURL}/take/picture`, {
       responseType: "json"
     });
 
@@ -22,5 +24,23 @@ export async function analyze() {
 
       throw lowConfidenceError;
     }
+  }
+}
+
+export async function replaceLowConfidencePlateWithRealPlate(
+  lowConfidencePlate,
+  realPlate
+) {
+  try {
+    await axios.post(`${serverURL}/revise/fail`, {
+      new: realPlate,
+      old: lowConfidencePlate
+    });
+
+    return true;
+  } catch (error) {
+    console.error(error.response.data);
+
+    return false;
   }
 }

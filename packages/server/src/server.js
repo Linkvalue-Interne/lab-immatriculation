@@ -74,9 +74,7 @@ app.post("/revise/fail", async function(req, res, next) {
     .where({ license_plate: req.body.new });
 
   if (!new_plate) {
-    res
-      .status(404)
-      .send("License plate unknow.");
+    res.status(404).send("License plate unknown.");
     return next();
   }
 
@@ -85,9 +83,7 @@ app.post("/revise/fail", async function(req, res, next) {
     .where({ detected_license_plate: req.body.old });
 
   if (!fail) {
-    res
-      .status(404)
-      .send("Detected license plate unknow.");
+    res.status(404).send("Detected license plate unknown.");
     return next();
   }
 
@@ -95,9 +91,7 @@ app.post("/revise/fail", async function(req, res, next) {
     .where({ detected_license_plate: req.body.old })
     .update({ license_plate_id: new_plate.id });
 
-  res
-    .status(200)
-    .send("Updated");
+  res.status(200).send("Updated");
   return next();
 });
 

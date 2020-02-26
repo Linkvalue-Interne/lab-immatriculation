@@ -1,5 +1,14 @@
 <template>
   <div>
+    <v-alert v-if="isSuccess" type="success">
+      Low confidence plate associated successfully with {{ this.realPlate }}
+    </v-alert>
+    <v-alert v-if="isError" type="error">
+      Low confidence plate could not be associated with
+      {{ this.realPlate }}. Maybe {{ this.realPlate }} is not registered in
+      database ?
+    </v-alert>
+    <router-link to="/">Return to homepage</router-link>
     <h1>Low confidence plate : {{ $route.params.plate }}</h1>
     <v-form @submit.prevent="submitForm()">
       <v-container>
@@ -26,17 +35,44 @@
 </template>
 
 <script>
+import { replaceLowConfidencePlateWithRealPlate } from "@/services/plate";
+
+const REPLACEMENT_STATUS = {
+  SUCCESS: "success",
+  ERROR: "error",
+  NOT_TRIED: "notTried"
+};
+
 export default {
   data() {
     return {
       lowConfidencePlate: this.$route.params.plate,
-      realPlate: ""
+      realPlate: "",
+      status: REPLACEMENT_STATUS.NOT_TRIED
     };
   },
 
+  computed: {
+    isSuccess: function() {
+      return this.status === REPLACEMENT_STATUS.SUCCESS;
+    },
+    isError: function() {
+      return this.status === REPLACEMENT_STATUS.ERROR;
+    }
+  },
+
   methods: {
-    submitForm() {
-      alert(`${this.lowConfidencePlate} -> ${this.realPlate}`);
+    async submitForm() {
+      const result = await replaceLowConfidencePlateWithRealPlate(
+        this.lowConfidencePlate,
+        this.realPlate
+      );
+
+      if (result) {
+        this.status = REPLACEMENT_STATUS.SUCCESS;
+      } else {
+        this.status = REPLACEMENT_STATUS.ERROR;
+      }
     }
   }
 };
