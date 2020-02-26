@@ -66,7 +66,7 @@ app.post("/revise/fail", async function(req, res, next) {
     .where({ license_plate: req.body.new });
 
   if (!plate) {
-    res.status(404);
+    res.status(404).send("Not found");
     return next();
   }
 
@@ -74,7 +74,7 @@ app.post("/revise/fail", async function(req, res, next) {
     .where({ detected_license_plate: req.body.old })
     .update({ license_plate_id: plate.id });
 
-  res.status(200);
+  res.status(200).send("Updated");
   return next();
 });
 
