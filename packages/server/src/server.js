@@ -21,7 +21,7 @@ app.use(express.json());
 
 app.get("/take/picture", async function(req, res, next) {
   const time = new Date().getTime();
-  const imageName = `/tmp/analyze/${time}.jpg`;
+  const imageName = `/tmp/${time}.jpg`;
   execSync(`raspistill -o ${imageName} -t 300`);
 
   const commandResult = execSync(`alpr -c eu --json -n 1 ${imageName}`, {
@@ -61,9 +61,8 @@ app.get("/take/picture", async function(req, res, next) {
 });
 
 app.get("/fails", async function(req, res, next) {
-  const fails = await knex("fails")
-    .select("*");
-  
+  const fails = await knex("fails").select("*");
+
   res.json({ fails });
   return next();
 });
